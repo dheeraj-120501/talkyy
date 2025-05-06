@@ -2,26 +2,40 @@ import { useState } from "react";
 import { useAudioRecorder } from "./hooks/useAudioRecorder";
 import { useDarkMode } from "./hooks/useDarkMode";
 import { RecordingsList } from "./components/RecordingsList";
+import { getWordSlice } from "./utils/textUtils";
 import type { TextItem } from "./types/TextItem";
+import RecordText from "./components/RecordText";
 
 function App() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
-  const texts: TextItem[] = [
-    { id: "1", text: "The quick brown fox jumps over the lazy dog." },
-    { id: "2", text: "Pack my box with five dozen liquor jugs." },
-    { id: "3", text: "How vexingly quick daft zebras jump." },
-    { id: "4", text: "Two driven jocks help fax my big quiz." },
-  ];
+  const texts: TextItem = {
+    id: "1",
+    text: "The quick brown fox jumps over the lazy dog.",
+    recordSubjects: [
+      [0, 6],
+      [2, 3],
+      [4, 5],
+      [6, 7],
+    ],
+  };
 
-  const isCompleted = currentTextIndex >= texts.length;
-  const currentText = isCompleted
-    ? "That's all, thanks for your feedback!"
-    : texts[currentTextIndex].text;
+  const isCompleted = currentTextIndex >= texts.recordSubjects.length;
+  const currentText = texts.text;
+  const currentRange: [number, number] = !isCompleted
+    ? texts.recordSubjects[currentTextIndex]
+    : [0, 0];
+  const { before, highlight, after } = !isCompleted
+    ? getWordSlice(currentText, currentRange)
+    : {
+        before: "",
+        highlight: "That's all, thanks for your feedback!",
+        after: "",
+      };
 
   const { isRecording, recordings, startRecording, stopRecording } =
-    useAudioRecorder(currentText);
+    useAudioRecorder(currentText, currentRange);
 
   const handleRecordingComplete = () => {
     setCurrentTextIndex((prev) => prev + 1);
@@ -46,11 +60,11 @@ function App() {
       <div className="max-w-2xl mx-auto space-y-8">
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
           <p className="text-lg text-gray-700 dark:text-gray-200">
-            {currentText}
+            <RecordText before={before} highlight={highlight} after={after} />
           </p>
           {!isCompleted && (
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              Recording {currentTextIndex + 1} of {texts.length}
+              Recording {currentTextIndex + 1} of {texts.recordSubjects.length}
             </p>
           )}
         </div>

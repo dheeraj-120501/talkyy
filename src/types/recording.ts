@@ -3,4 +3,5 @@ export interface Recording {
   timestamp: Date;
   id: string;
   text: string;
+  wordRange: [number, number];
 }
