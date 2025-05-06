@@ -10,15 +10,12 @@ export const RecordingsList = ({ recordings }: RecordingsListProps) => {
 
   return (
     <div className="w-full">
-      <h2 className="text-lg font-semibold mb-3 text-gray-700">
+      <h2 className="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
         Your Recordings
       </h2>
       <div className="space-y-3">
         {recordings.map((recording) => (
-          <RecordingItem
-            key={recording.timestamp.getTime()}
-            recording={recording}
-          />
+          <RecordingItem key={recording.id} recording={recording} />
         ))}
       </div>
     </div>

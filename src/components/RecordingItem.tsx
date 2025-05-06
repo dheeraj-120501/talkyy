@@ -11,20 +11,18 @@ export const RecordingItem = ({ recording }: RecordingItemProps) => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm flex items-center justify-between">
-      <span className="text-sm text-gray-600">
+    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex items-center justify-between">
+      <span className="text-sm text-gray-600 dark:text-gray-300">
         {recording.timestamp.toLocaleString()}
         {" - "}
         {(recording.blob.size / 1024).toFixed(2)} KB
       </span>
-      <div className="flex gap-2">
-        <button
-          onClick={playRecording}
-          className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600"
-        >
-          Play
-        </button>
-      </div>
+      <button
+        onClick={playRecording}
+        className="px-3 py-1 text-sm bg-green-500 text-white rounded hover:bg-green-600"
+      >
+        Play
+      </button>
     </div>
   );
 };

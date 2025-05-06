@@ -25,6 +25,7 @@ export const useAudioRecorder = () => {
         const newRecording: Recording = {
           blob,
           timestamp: new Date(),
+          id: crypto.randomUUID(),
         };
         setRecordings((prev) => [...prev, newRecording]);
         mediaRecorderRef.current = null;
