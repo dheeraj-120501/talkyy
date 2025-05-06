@@ -1,4 +1,4 @@
-import type { Recording } from "../types/recording";
+import type { Recording } from "../types/Recording";
 
 interface RecordingItemProps {
   recording: Recording;

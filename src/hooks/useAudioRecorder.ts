@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import type { Recording } from "../types/recording";
+import type { Recording } from "../types/Recording";
 
 export const useAudioRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
