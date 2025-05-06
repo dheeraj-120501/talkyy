@@ -6,15 +6,13 @@ interface RecordTextProps {
 
 function RecordText({ before, highlight, after }: RecordTextProps) {
   return (
-    <>
-      <span className="opacity-50">{before}</span>
+    <div className="font-semibold">
+      <span className="opacity-40">{before}</span>
       {before && " "}
-      <span className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded">
-        {highlight}
-      </span>
+      <span className="opacity-100">{highlight}</span>
       {after && " "}
-      <span className="opacity-50">{after}</span>
-    </>
+      <span className="opacity-40">{after}</span>
+    </div>
   );
 }
 
