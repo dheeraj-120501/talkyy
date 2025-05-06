@@ -5,8 +5,6 @@ import { RecordingsList } from "./components/RecordingsList";
 import type { TextItem } from "./types/TextItem";
 
 function App() {
-  const { isRecording, recordings, startRecording, stopRecording } =
-    useAudioRecorder();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
@@ -21,6 +19,9 @@ function App() {
   const currentText = isCompleted
     ? "That's all, thanks for your feedback!"
     : texts[currentTextIndex].text;
+
+  const { isRecording, recordings, startRecording, stopRecording } =
+    useAudioRecorder(currentText);
 
   const handleRecordingComplete = () => {
     setCurrentTextIndex((prev) => prev + 1);

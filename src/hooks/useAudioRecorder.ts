@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import type { Recording } from "../types/Recording";
 
-export const useAudioRecorder = () => {
+export const useAudioRecorder = (currentText: string) => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordings, setRecordings] = useState<Recording[]>([]);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -26,6 +26,7 @@ export const useAudioRecorder = () => {
           blob,
           timestamp: new Date(),
           id: crypto.randomUUID(),
+          text: currentText,
         };
         setRecordings((prev) => [...prev, newRecording]);
         mediaRecorderRef.current = null;
