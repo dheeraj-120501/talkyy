@@ -1,12 +1,9 @@
 import { useState, useRef } from "react";
-import type { Recording } from "../types/Recording";
 
 export const useAudioRecorder = (
-  currentText: string,
-  wordRange: [number, number]
+  onRecordingComplete: (recording: Blob) => void
 ) => {
   const [isRecording, setIsRecording] = useState(false);
-  const [recordings, setRecordings] = useState<Recording[]>([]);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 
   const startRecording = async () => {
@@ -25,14 +22,7 @@ export const useAudioRecorder = (
         stream.getTracks().forEach((track) => track.stop());
 
         const blob = new Blob(chunks, { type: "audio/webm" });
-        const newRecording: Recording = {
-          blob,
-          timestamp: new Date(),
-          id: crypto.randomUUID(),
-          text: currentText,
-          wordRange,
-        };
-        setRecordings((prev) => [...prev, newRecording]);
+        onRecordingComplete(blob);
         mediaRecorderRef.current = null;
       };
 
@@ -56,7 +46,6 @@ export const useAudioRecorder = (
 
   return {
     isRecording,
-    recordings,
     startRecording,
     stopRecording,
   };
