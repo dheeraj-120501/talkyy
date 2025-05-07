@@ -43,6 +43,11 @@ function Recorder({ recordingPrompts }: RecorderProps) {
   const { isRecording, startRecording, stopRecording } =
     useAudioRecorder(onRecordingComplete);
 
+  if (isCompleted) {
+    console.log("Recording complete. All prompts have been recorded.");
+    console.log("Recordings:", recordings);
+  }
+
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
