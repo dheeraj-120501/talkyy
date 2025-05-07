@@ -3,14 +3,14 @@ import { useAudioRecorder } from "./hooks/useAudioRecorder";
 import { useDarkMode } from "./hooks/useDarkMode";
 import { RecordingsList } from "./components/RecordingsList";
 import { getWordSlice } from "./utils/textUtils";
-import type { TextItem } from "./types/TextItem";
+import type { RecordingPrompt } from "./types/RecordingPrompt";
 import RecordText from "./components/RecordText";
 
 function App() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
 
-  const texts: TextItem = {
+  const texts: RecordingPrompt = {
     id: "1",
     text: "The quick brown fox jumps over the lazy dog.",
     recordSubjects: [
