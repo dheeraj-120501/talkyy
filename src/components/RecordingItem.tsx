@@ -57,9 +57,7 @@ export const RecordingItem = ({ recording }: RecordingItemProps) => {
           </h3>
 
           <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-            <p className="text-gray-700 dark:text-gray-200">
-              <RecordText before={before} highlight={highlight} after={after} />
-            </p>
+            <RecordText before={before} highlight={highlight} after={after} />
           </div>
 
           <div className="flex items-center justify-between">
