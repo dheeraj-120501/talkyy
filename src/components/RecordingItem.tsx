@@ -35,9 +35,14 @@ export const RecordingItem = ({ recording }: RecordingItemProps) => {
         className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
         onClick={() => setIsModalOpen(true)}
       >
-        <span className="text-sm text-gray-600 dark:text-gray-300">
-          {recording.timestamp.toLocaleString()}
-        </span>
+        <div className="overflow-y-hidden">
+          <div className="text-xs text-gray-600 dark:text-gray-400 -mt-1 mb-1">
+            {recording.timestamp.toLocaleString()}
+          </div>
+          <div className="text-lg dark:text-gray-100 truncate px-1">
+            {recording.transcription}
+          </div>
+        </div>
         <button className="px-3 py-1 text-sm text-white rounded bg-blue-600 cursor-pointer">
           View Recording
         </button>
@@ -49,9 +54,9 @@ export const RecordingItem = ({ recording }: RecordingItemProps) => {
             Recording Details
           </h3>
 
-          {/* <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-            To Be Filled
-          </div> */}
+          <div className="bg-gray-50 dark:bg-gray-700 dark:text-gray-200 p-4 rounded-lg">
+            {recording.transcription}
+          </div>
 
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500 dark:text-gray-400">
