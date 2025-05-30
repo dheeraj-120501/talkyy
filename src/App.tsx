@@ -1,24 +1,8 @@
-import { useEffect, useState } from "react";
 import { useDarkMode } from "./hooks/useDarkMode";
-import type { RecordingPrompt } from "./types/RecordingPrompt";
-import recordingService from "./services/RecordingService";
 import Recorder from "./components/Recorder";
 
 function App() {
   const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const [recordingPrompts, setRecordingPrompts] = useState<RecordingPrompt[]>(
-    []
-  );
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    setIsLoading(true);
-    // Handle error state as well
-    recordingService.getAllPrompts().then((prompts) => {
-      setRecordingPrompts(prompts);
-      setIsLoading(false);
-    });
-  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8">
@@ -30,13 +14,7 @@ function App() {
           {isDarkMode ? "🌞" : "🌙"}
         </button>
       </div>
-      {isLoading ? (
-        <p className="text-center text-gray-500 dark:text-gray-400">
-          Loading...
-        </p>
-      ) : (
-        <Recorder recordingPrompts={recordingPrompts} />
-      )}
+      <Recorder />
     </div>
   );
 }

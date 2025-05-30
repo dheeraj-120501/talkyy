@@ -1,8 +1,6 @@
 import { useState, useRef } from "react";
 import type { Recording } from "../types/Recording";
 import { Modal } from "./Modal";
-import { getWordSlice } from "../utils/textUtils";
-import RecordText from "./RecordText";
 
 interface RecordingItemProps {
   recording: Recording;
@@ -12,11 +10,6 @@ export const RecordingItem = ({ recording }: RecordingItemProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const { before, highlight, after } = getWordSlice(
-    recording.text,
-    recording.wordRange
-  );
 
   const handleCloseModal = () => {
     if (audioRef.current) {
@@ -56,9 +49,9 @@ export const RecordingItem = ({ recording }: RecordingItemProps) => {
             Recording Details
           </h3>
 
-          <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-            <RecordText before={before} highlight={highlight} after={after} />
-          </div>
+          {/* <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+            To Be Filled
+          </div> */}
 
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500 dark:text-gray-400">
