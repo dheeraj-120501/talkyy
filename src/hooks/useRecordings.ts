@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import type { Recording } from "../types/Recording";
-import { base64ToBlob, blobToBase64 } from "../utils/blobCoversion";
+import type { Recording } from "../types/recording";
+
+import { base64ToBlob, blobToBase64 } from "../utils/blobConversion";
 
 export const useRecordings = () => {
   const [recordings, setRecordings] = useState<Recording[]>(() => {
@@ -28,9 +29,19 @@ export const useRecordings = () => {
     ]);
   };
 
+  const deleteRecording = (id: string) => {
+    setRecordings((current: Recording[]) => {
+      return current.filter((recording: Recording) => recording.id !== id);
+    });
+  };
+
+  const deleteAllRecordings = () => {
+    setRecordings([]);
+  };
+
   useEffect(() => {
     localStorage.setItem("recordings", JSON.stringify(recordings));
   }, [recordings]);
 
-  return { recordings, addRecording };
+  return { recordings, addRecording, deleteRecording, deleteAllRecordings };
 };

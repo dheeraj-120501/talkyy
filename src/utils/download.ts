@@ -1,5 +1,6 @@
 import JSZip from "jszip";
-import type { Recording } from "../types/Recording";
+import type { Recording } from "../types/recording";
+
 
 export const downloadRecordings = async (recordings: Recording[]) => {
   const zip = new JSZip();

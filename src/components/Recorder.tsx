@@ -4,7 +4,8 @@ import { useTranscriber } from "../hooks/useTranscriber";
 import { useRecordings } from "../hooks/useRecordings";
 
 function Recorder() {
-  const { recordings, addRecording } = useRecordings();
+  const { recordings, addRecording, deleteRecording, deleteAllRecordings } =
+    useRecordings();
   const { isTranscribing, transcribe } = useTranscriber(addRecording);
   const { isRecording, startRecording, stopRecording } =
     useAudioRecorder(transcribe);
@@ -15,7 +16,7 @@ function Recorder() {
         <button
           onClick={isRecording ? stopRecording : startRecording}
           disabled={isTranscribing}
-          className={`px-6 py-3 rounded-full font-medium text-white transition-colors ${
+          className={`px-6 py-3 mb-10 rounded-full font-medium text-white transition-colors ${
             isTranscribing
               ? "bg-gray-400 cursor-not-allowed"
               : isRecording
@@ -30,7 +31,11 @@ function Recorder() {
               : "Start Recording"}
         </button>
 
-        <RecordingsList recordings={recordings} />
+        <RecordingsList
+          recordings={recordings}
+          deleteRecording={deleteRecording}
+          deleteAllRecordings={deleteAllRecordings}
+        />
       </div>
     </div>
   );
