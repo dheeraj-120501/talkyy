@@ -19,7 +19,7 @@ const callApi = async (audio: Blob) => {
 };
 
 export const useTranscriber = (
-  onTranscribeComplete: (audio: Blob, transcrption: string) => void,
+  onTranscribeComplete: (audio: Blob, transcription: string) => Promise<void>,
 ) => {
   const [isTranscribing, setIsTranscribing] = useState(false);
 
@@ -28,15 +28,12 @@ export const useTranscriber = (
 
     try {
       const transcription = await callApi(audio);
-      onTranscribeComplete(audio, transcription.audio_data);
+      await onTranscribeComplete(audio, transcription.audio_data);
       setIsTranscribing(false);
     } catch {
       setIsTranscribing(false);
     }
   };
 
-  return {
-    tarnscribe: transcribe,
-    isTranscribing: isTranscribing,
-  };
+  return { transcribe, isTranscribing };
 };

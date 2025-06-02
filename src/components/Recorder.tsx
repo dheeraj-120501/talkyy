@@ -1,27 +1,13 @@
-import { useState } from "react";
 import { RecordingsList } from "./RecordingsList";
 import { useAudioRecorder } from "../hooks/useAudioRecorder";
-import type { Recording } from "../types/Recording";
 import { useTranscriber } from "../hooks/useTranscriber";
+import { useRecordings } from "../hooks/useRecordings";
 
 function Recorder() {
-  const [recordings, setRecordings] = useState<Recording[]>([]);
-
-  const onTranscribeComplete = (audio: Blob, transcription: string) => {
-    setRecordings((prev: Recording[]) => [
-      {
-        blob: audio,
-        timestamp: new Date(),
-        id: crypto.randomUUID(),
-        transcription,
-      },
-      ...prev,
-    ]);
-  };
-
-  const { isTranscribing, tarnscribe } = useTranscriber(onTranscribeComplete);
+  const { recordings, addRecording } = useRecordings();
+  const { isTranscribing, transcribe } = useTranscriber(addRecording);
   const { isRecording, startRecording, stopRecording } =
-    useAudioRecorder(tarnscribe);
+    useAudioRecorder(transcribe);
 
   return (
     <div className="max-w-2xl mx-auto mt-5 space-y-8">
