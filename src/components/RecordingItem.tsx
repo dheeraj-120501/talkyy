@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import type { Recording } from "../types/recording";
-
 import { Modal } from "./Modal";
 import { downloadRecordings } from "../utils/download";
 

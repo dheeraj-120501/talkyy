@@ -1,7 +1,6 @@
 import JSZip from "jszip";
 import type { Recording } from "../types/recording";
 
-
 export const downloadRecordings = async (recordings: Recording[]) => {
   const zip = new JSZip();
 
@@ -12,7 +11,13 @@ export const downloadRecordings = async (recordings: Recording[]) => {
 
   // Add transcriptions
   const transcriptions = recordings.map((recording: Recording) => {
-    return { id: recording.id, transcription: recording.transcription };
+    console.log(recording.language);
+    return {
+      id: recording.id,
+      file: `${recording.id}.wav`,
+      transcription: recording.transcription,
+      language: recording.language,
+    };
   });
   const transcriptionsBlob = new Blob([JSON.stringify(transcriptions)], {
     type: "text/plain",

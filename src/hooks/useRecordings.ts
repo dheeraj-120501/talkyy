@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Recording } from "../types/recording";
-
 import { base64ToBlob, blobToBase64 } from "../utils/blobConversion";
+import type { Language } from "../types/language";
 
 export const useRecordings = () => {
   const [recordings, setRecordings] = useState<Recording[]>(() => {
@@ -15,7 +15,11 @@ export const useRecordings = () => {
       : [];
   });
 
-  const addRecording = async (audio: Blob, transcription: string) => {
+  const addRecording = async (
+    audio: Blob,
+    transcription: string,
+    language: Language,
+  ) => {
     const res = await blobToBase64(audio);
     setRecordings((prev: Recording[]) => [
       {
@@ -23,6 +27,7 @@ export const useRecordings = () => {
         base64Blob: res,
         timestamp: new Date(),
         id: crypto.randomUUID(),
+        language,
         transcription,
       },
       ...prev,

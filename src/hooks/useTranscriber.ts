@@ -1,10 +1,11 @@
 import { useState } from "react";
+import type { Language } from "../types/language";
 
-const callApi = async (audio: Blob) => {
+const callApi = async (audio: Blob, language: Language) => {
   const formdata = new FormData();
-  formdata.append("file", audio, "sample.wav");
-  formdata.append("language_encodings", "en-US");
-  formdata.append("language_encodings", "es-ES");
+  formdata.append("audio_file", audio, "sample.wav");
+  formdata.append("language", language);
+  formdata.append("vocabulary", "[]");
 
   const requestOptions = {
     method: "POST",
@@ -12,23 +13,27 @@ const callApi = async (audio: Blob) => {
   };
 
   const response = await fetch(
-    "http://127.0.0.1:8000/upload_audio2/",
+    "http://127.0.0.1:8000/dev/transcribe-audio/",
     requestOptions,
   );
   return await response.json();
 };
 
 export const useTranscriber = (
-  onTranscribeComplete: (audio: Blob, transcription: string) => Promise<void>,
+  onTranscribeComplete: (
+    audio: Blob,
+    transcription: string,
+    language: Language,
+  ) => Promise<void>,
 ) => {
   const [isTranscribing, setIsTranscribing] = useState(false);
 
-  const transcribe = async (audio: Blob) => {
+  const transcribe = async (audio: Blob, language: Language) => {
     setIsTranscribing(true);
 
     try {
-      const transcription = await callApi(audio);
-      await onTranscribeComplete(audio, transcription.audio_data);
+      const transcription = await callApi(audio, language);
+      await onTranscribeComplete(audio, transcription.transcription, language);
       setIsTranscribing(false);
     } catch {
       setIsTranscribing(false);
