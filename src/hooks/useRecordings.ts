@@ -7,22 +7,26 @@ export const useRecordings = () => {
   const [recordings, setRecordings] = useState<Recording[]>([]);
   const dbName = "MyDatabase";
   const storeName = "recordings";
+  const indexName = "recordingsTimestampIdx";
 
   useEffect(() => {
     const initDB = async () => {
       const db = await openDB(dbName, 1, {
         upgrade(db) {
-          db.createObjectStore(storeName, { keyPath: "id" }); // Use string key
+          const store = db.createObjectStore(storeName, { keyPath: "id" }); // Use string key
+          store.createIndex(indexName, "timestamp");
         },
       });
-      await loadRecodings(db);
+      await loadRecordings(db);
     };
 
     initDB();
   }, []);
 
-  const loadRecodings = async (db: IDBPDatabase) => {
-    const allRecordings = await db.getAll(storeName);
+  const loadRecordings = async (db: IDBPDatabase) => {
+    const allRecordings = (
+      await db.getAllFromIndex(storeName, indexName)
+    ).reverse();
     setRecordings(allRecordings);
   };
 
@@ -40,19 +44,19 @@ export const useRecordings = () => {
       transcription,
     };
     await db.add(storeName, recording);
-    await loadRecodings(db); // Reload users after adding
+    await loadRecordings(db); // Reload users after adding
   };
 
   const deleteRecording = async (id: string) => {
     const db = await openDB(dbName);
     await db.delete(storeName, id);
-    await loadRecodings(db);
+    await loadRecordings(db);
   };
 
   const deleteAllRecordings = async () => {
     const db = await openDB(dbName);
     await db.clear(storeName);
-    await loadRecodings(db);
+    await loadRecordings(db);
   };
 
   return { recordings, addRecording, deleteRecording, deleteAllRecordings };
