@@ -1,52 +1,59 @@
 import { useEffect, useState } from "react";
 import type { Recording } from "../types/recording";
-import { base64ToBlob, blobToBase64 } from "../utils/blobConversion";
 import type { Language } from "../types/language";
+import { openDB, type IDBPDatabase } from "idb";
 
 export const useRecordings = () => {
-  const [recordings, setRecordings] = useState<Recording[]>(() => {
-    const savedRecordings = localStorage.getItem("recordings");
-    return savedRecordings
-      ? (JSON.parse(savedRecordings) as Recording[]).map(
-          (recording: Recording): Recording => {
-            return { ...recording, blob: base64ToBlob(recording.base64Blob) };
-          },
-        )
-      : [];
-  });
+  const [recordings, setRecordings] = useState<Recording[]>([]);
+  const dbName = "MyDatabase";
+  const storeName = "recordings";
+
+  useEffect(() => {
+    const initDB = async () => {
+      const db = await openDB(dbName, 1, {
+        upgrade(db) {
+          db.createObjectStore(storeName, { keyPath: "id" }); // Use string key
+        },
+      });
+      await loadRecodings(db);
+    };
+
+    initDB();
+  }, []);
+
+  const loadRecodings = async (db: IDBPDatabase) => {
+    const allRecordings = await db.getAll(storeName);
+    setRecordings(allRecordings);
+  };
 
   const addRecording = async (
     audio: Blob,
     transcription: string,
     language: Language,
   ) => {
-    const res = await blobToBase64(audio);
-    setRecordings((prev: Recording[]) => [
-      {
-        blob: audio,
-        base64Blob: res,
-        timestamp: new Date(),
-        id: crypto.randomUUID(),
-        language,
-        transcription,
-      },
-      ...prev,
-    ]);
+    const db = await openDB(dbName);
+    const recording: Recording = {
+      blob: audio,
+      timestamp: new Date(),
+      id: crypto.randomUUID(),
+      language,
+      transcription,
+    };
+    await db.add(storeName, recording);
+    await loadRecodings(db); // Reload users after adding
   };
 
-  const deleteRecording = (id: string) => {
-    setRecordings((current: Recording[]) => {
-      return current.filter((recording: Recording) => recording.id !== id);
-    });
+  const deleteRecording = async (id: string) => {
+    const db = await openDB(dbName);
+    await db.delete(storeName, id);
+    await loadRecodings(db);
   };
 
-  const deleteAllRecordings = () => {
-    setRecordings([]);
+  const deleteAllRecordings = async () => {
+    const db = await openDB(dbName);
+    await db.clear(storeName);
+    await loadRecodings(db);
   };
-
-  useEffect(() => {
-    localStorage.setItem("recordings", JSON.stringify(recordings));
-  }, [recordings]);
 
   return { recordings, addRecording, deleteRecording, deleteAllRecordings };
 };

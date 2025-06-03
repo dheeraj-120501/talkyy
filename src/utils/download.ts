@@ -11,7 +11,6 @@ export const downloadRecordings = async (recordings: Recording[]) => {
 
   // Add transcriptions
   const transcriptions = recordings.map((recording: Recording) => {
-    console.log(recording.language);
     return {
       id: recording.id,
       file: `${recording.id}.wav`,
