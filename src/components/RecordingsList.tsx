@@ -23,7 +23,7 @@ export const RecordingsList = ({
     <div className="w-full">
       <div className="w-full flex justify-between mb-2">
         <h2 className="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
-          Your Recordings
+          Your Recordings ({recordings.length})
         </h2>
         <div className="flex gap-2">
           <button
@@ -56,14 +56,16 @@ export const RecordingsList = ({
           </button>
         </div>
       </div>
-      <div className="space-y-3">
-        {recordings.map((recording) => (
-          <RecordingItem
-            key={recording.id}
-            recording={recording}
-            deleteRecording={deleteRecording}
-          />
-        ))}
+      <div className="max-h-96 overflow-scroll">
+        <div className="flex flex-col gap-1.5">
+          {recordings.map((recording) => (
+            <RecordingItem
+              key={recording.id}
+              recording={recording}
+              deleteRecording={deleteRecording}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
