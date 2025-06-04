@@ -1,9 +1,9 @@
 import type { Language } from "./language";
 
-export interface Recording {
+export interface Transcript {
   blob: Blob;
   timestamp: Date;
   id: string;
   language: Language;
-  transcription: string;
+  transcript: string;
 }

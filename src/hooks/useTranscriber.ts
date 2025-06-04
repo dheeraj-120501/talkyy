@@ -22,7 +22,7 @@ const callApi = async (audio: Blob, language: Language) => {
 export const useTranscriber = (
   onTranscribeComplete: (
     audio: Blob,
-    transcription: string,
+    transcript: string,
     language: Language,
   ) => Promise<void>,
 ) => {
@@ -32,8 +32,9 @@ export const useTranscriber = (
     setIsTranscribing(true);
 
     try {
-      const transcription = await callApi(audio, language);
-      await onTranscribeComplete(audio, transcription.transcription, language);
+      const transcript = await callApi(audio, language);
+      console.log(transcript);
+      await onTranscribeComplete(audio, transcript.transcription, language);
       setIsTranscribing(false);
     } catch {
       setIsTranscribing(false);

@@ -1,17 +1,17 @@
 import { useState, useRef } from "react";
-import type { Recording } from "../types/recording";
+import type { Transcript } from "../types/transcript";
 import { Modal } from "./Modal";
-import { downloadRecordings } from "../utils/download";
+import { downloadTranscripts } from "../utils/download";
 
-interface RecordingItemProps {
-  recording: Recording;
-  deleteRecording: (id: string) => void;
+interface TranscriptItemProps {
+  transcript: Transcript;
+  deleteTranscript: (id: string) => void;
 }
 
-export const RecordingItem = ({
-  recording,
-  deleteRecording,
-}: RecordingItemProps) => {
+export const TranscriptItem = ({
+  transcript,
+  deleteTranscript,
+}: TranscriptItemProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -27,18 +27,18 @@ export const RecordingItem = ({
 
   const playRecording = () => {
     if (!audioRef.current) {
-      audioRef.current = new Audio(URL.createObjectURL(recording.blob));
+      audioRef.current = new Audio(URL.createObjectURL(transcript.blob));
       audioRef.current.onended = () => setIsPlaying(false);
     }
     audioRef.current.play();
     setIsPlaying(true);
   };
 
-  const downloadRecording = async () => {
-    await downloadRecordings([recording]);
+  const downloadTranscript = async () => {
+    await downloadTranscripts([transcript]);
   };
 
-  const deleteCurrentRecordings = () => deleteRecording(recording.id);
+  const deleteCurrentTranscript = () => deleteTranscript(transcript.id);
 
   return (
     <>
@@ -48,10 +48,10 @@ export const RecordingItem = ({
       >
         <div className="overflow-y-hidden">
           <div className="text-xs text-gray-600 dark:text-gray-400 -mt-1 mb-1">
-            {recording.timestamp.toLocaleString()}
+            {transcript.timestamp.toLocaleString()}
           </div>
           <div className="text-lg dark:text-gray-100 truncate px-1">
-            {recording.transcription}
+            {transcript.transcript}
           </div>
         </div>
 
@@ -82,7 +82,7 @@ export const RecordingItem = ({
 
           <button
             className="px-2.5 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-            onClick={downloadRecording}
+            onClick={downloadTranscript}
           >
             <svg
               className="fill-current w-4 h-4"
@@ -95,7 +95,7 @@ export const RecordingItem = ({
 
           <button
             className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded-lg inline-flex items-center"
-            onClick={deleteCurrentRecordings}
+            onClick={deleteCurrentTranscript}
           >
             <svg
               className="fill-current w-4 h-4"
@@ -113,23 +113,23 @@ export const RecordingItem = ({
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Recording Details
+            Transcript Details
           </h3>
 
           <div className="bg-gray-50 dark:bg-gray-700 dark:text-gray-200 p-4 rounded-lg">
-            {recording.transcription}
+            {transcript.transcript}
           </div>
 
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              {recording.timestamp.toLocaleString()}
+              {transcript.timestamp.toLocaleString()}
               {" - "}
-              {(recording.blob.size / 1024).toFixed(2)} KB
+              {(transcript.blob.size / 1024).toFixed(2)} KB
             </div>
             <div className="flex items-center gap-2">
               <button
                 className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded-lg inline-flex items-center"
-                onClick={deleteCurrentRecordings}
+                onClick={deleteCurrentTranscript}
               >
                 <svg
                   className="fill-current w-4 h-4"
@@ -144,7 +144,7 @@ export const RecordingItem = ({
 
               <button
                 className="px-2.5 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                onClick={downloadRecording}
+                onClick={downloadTranscript}
               >
                 <svg
                   className="fill-current w-4 h-4"

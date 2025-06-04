@@ -1,9 +1,10 @@
-import { RecordingsList } from "./RecordingsList";
+import { TranscriptList } from "./TranscriptsList";
 import { useAudioRecorder } from "../hooks/useAudioRecorder";
 import { useTranscriber } from "../hooks/useTranscriber";
-import { useRecordings } from "../hooks/useRecordings";
+import { useIndexedDB } from "../hooks/useIndexedDB";
 import { useState } from "react";
 import type { Language } from "../types/language";
+import type { Transcript } from "../types/transcript";
 
 const languageOptions: { value: Language; label: string }[] = [
   { value: "en-IN", label: "English" },
@@ -12,9 +13,27 @@ const languageOptions: { value: Language; label: string }[] = [
 
 function Recorder() {
   const [language, setLanguage] = useState<Language>("en-IN");
-  const { recordings, addRecording, deleteRecording, deleteAllRecordings } =
-    useRecordings();
-  const { isTranscribing, transcribe } = useTranscriber(addRecording);
+
+  const {
+    records: transcripts,
+    addRecord: addTranscript,
+    deleteRecord: deleteTranscript,
+    deleteAllRecords: deleteAllTranscripts,
+  } = useIndexedDB<Transcript>("transcript");
+
+  const { isTranscribing, transcribe } = useTranscriber(
+    (audio, transcript, language) => {
+      console.log(audio, transcript, language);
+      return addTranscript({
+        id: crypto.randomUUID(),
+        blob: audio,
+        timestamp: new Date(),
+        transcript,
+        language,
+      });
+    },
+  );
+
   const { isRecording, startRecording, stopRecording } = useAudioRecorder(
     (audio: Blob) => transcribe(audio, language),
   );
@@ -60,10 +79,10 @@ function Recorder() {
               : "Start Recording"}
         </button>
 
-        <RecordingsList
-          recordings={recordings}
-          deleteRecording={deleteRecording}
-          deleteAllRecordings={deleteAllRecordings}
+        <TranscriptList
+          transcripts={transcripts}
+          deleteTranscript={deleteTranscript}
+          deleteAllTranscripts={deleteAllTranscripts}
         />
       </div>
     </div>

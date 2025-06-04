@@ -1,29 +1,29 @@
-import type { Recording } from "../types/recording";
-import { downloadRecordings } from "../utils/download";
-import { RecordingItem } from "./RecordingItem";
+import type { Transcript } from "../types/transcript";
+import { downloadTranscripts } from "../utils/download";
+import { TranscriptItem } from "./TranscriptItem";
 
-interface RecordingsListProps {
-  recordings: Recording[];
-  deleteRecording: (id: string) => void;
-  deleteAllRecordings: () => void;
+interface TranscriptsListProps {
+  transcripts: Transcript[];
+  deleteTranscript: (id: string) => void;
+  deleteAllTranscripts: () => void;
 }
 
-export const RecordingsList = ({
-  recordings,
-  deleteRecording,
-  deleteAllRecordings,
-}: RecordingsListProps) => {
-  if (recordings.length === 0) return null;
+export const TranscriptList = ({
+  transcripts,
+  deleteTranscript,
+  deleteAllTranscripts: deleteAllTranscripts,
+}: TranscriptsListProps) => {
+  if (transcripts.length === 0) return null;
 
   const downloadAll = () => {
-    downloadRecordings(recordings);
+    downloadTranscripts(transcripts);
   };
 
   return (
     <div className="w-full">
       <div className="w-full flex justify-between mb-2">
         <h2 className="text-lg font-semibold mb-3 text-gray-700 dark:text-gray-200">
-          Your Recordings ({recordings.length})
+          Your Transcripts ({transcripts.length})
         </h2>
         <div className="flex gap-2">
           <button
@@ -41,7 +41,7 @@ export const RecordingsList = ({
           </button>
           <button
             className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg inline-flex items-center"
-            onClick={deleteAllRecordings}
+            onClick={deleteAllTranscripts}
           >
             <svg
               className="fill-current w-4 h-4 mr-2"
@@ -58,11 +58,11 @@ export const RecordingsList = ({
       </div>
       <div className="max-h-96 overflow-scroll">
         <div className="flex flex-col gap-1.5">
-          {recordings.map((recording) => (
-            <RecordingItem
-              key={recording.id}
-              recording={recording}
-              deleteRecording={deleteRecording}
+          {transcripts.map((transcript) => (
+            <TranscriptItem
+              key={transcript.id}
+              transcript={transcript}
+              deleteTranscript={deleteTranscript}
             />
           ))}
         </div>
