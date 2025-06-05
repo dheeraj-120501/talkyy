@@ -43,7 +43,7 @@ export const TranscriptItem = ({
   return (
     <>
       <div
-        className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
+        className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600"
         onClick={() => setIsModalOpen(true)}
       >
         <div className="overflow-y-hidden">

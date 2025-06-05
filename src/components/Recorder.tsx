@@ -5,6 +5,8 @@ import { useIndexedDB } from "../hooks/useIndexedDB";
 import { useState } from "react";
 import type { Language } from "../types/language";
 import type { Transcript } from "../types/transcript";
+import { TabView } from "./TabView";
+import { Tab } from "./Tab";
 
 const languageOptions: { value: Language; label: string }[] = [
   { value: "en-IN", label: "English" },
@@ -45,7 +47,7 @@ function Recorder() {
           Language select
         </label>
         <select
-          className="rounded-lg px-6 py-3 mb-7 shadow font-medium dark:text-gray-100 dark:bg-gray-700"
+          className="rounded-lg px-6 py-3 mb-7 shadow font-medium dark:text-gray-100 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600"
           name="language-select"
           defaultValue={language}
           onChange={(e) => setLanguage(e.target.value as Language)}
@@ -79,11 +81,17 @@ function Recorder() {
               : "Start Recording"}
         </button>
 
-        <TranscriptList
-          transcripts={transcripts}
-          deleteTranscript={deleteTranscript}
-          deleteAllTranscripts={deleteAllTranscripts}
-        />
+        <TabView>
+          <Tab label={`Trancripts (${transcripts.length})`}>
+            <TranscriptList
+              transcripts={transcripts}
+              deleteTranscript={deleteTranscript}
+              deleteAllTranscripts={deleteAllTranscripts}
+            />
+          </Tab>
+
+          <Tab label="Text Responses">Under construction</Tab>
+        </TabView>
       </div>
     </div>
   );
