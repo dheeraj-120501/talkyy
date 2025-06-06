@@ -5,12 +5,17 @@ import { useIndexedDB } from "../hooks/useIndexedDB";
 import { useState } from "react";
 import type { Language } from "../types/language";
 import type { Transcript } from "../types/transcript";
-import { TabView } from "./TabView";
-import { Tab } from "./Tab";
 
 const languageOptions: { value: Language; label: string }[] = [
-  { value: "en-IN", label: "English" },
-  { value: "hi-IN", label: "Hindi" },
+  { label: "English", value: "en-IN" },
+  { label: "Hindi", value: "hi-IN" },
+  { label: "Bengali", value: "bn-IN" },
+  { label: "Telugu", value: "te-IN" },
+  { label: "Tamil", value: "ta-IN" },
+  { label: "Marathi", value: "mr-IN" },
+  { label: "Gujrati", value: "gu-IN" },
+  { label: "Kannad", value: "kn-IN" },
+  { label: "Malyalam", value: "ml-IN" },
 ];
 
 function Recorder() {
@@ -81,17 +86,11 @@ function Recorder() {
               : "Start Recording"}
         </button>
 
-        <TabView>
-          <Tab label={`Trancripts (${transcripts.length})`}>
-            <TranscriptList
-              transcripts={transcripts}
-              deleteTranscript={deleteTranscript}
-              deleteAllTranscripts={deleteAllTranscripts}
-            />
-          </Tab>
-
-          <Tab label="Text Responses">Under construction</Tab>
-        </TabView>
+        <TranscriptList
+          transcripts={transcripts}
+          deleteTranscript={deleteTranscript}
+          deleteAllTranscripts={deleteAllTranscripts}
+        />
       </div>
     </div>
   );
