@@ -6,7 +6,7 @@ export const downloadTranscripts = async (transcripts: Transcript[]) => {
 
   // Add recordings
   transcripts.forEach((recording: Transcript) => {
-    zip.file(`${recording.id}.wav`, recording.blob);
+    zip.file(`${recording.id}.wav`, recording.questionAudio);
   });
 
   // Add transcripts
@@ -14,7 +14,7 @@ export const downloadTranscripts = async (transcripts: Transcript[]) => {
     return {
       id: recording.id,
       file: `${recording.id}.wav`,
-      transcript: recording.transcript,
+      transcript: recording.question,
       language: recording.language,
     };
   });

@@ -27,7 +27,9 @@ export const TranscriptItem = ({
 
   const playRecording = () => {
     if (!audioRef.current) {
-      audioRef.current = new Audio(URL.createObjectURL(transcript.blob));
+      audioRef.current = new Audio(
+        URL.createObjectURL(transcript.questionAudio),
+      );
       audioRef.current.onended = () => setIsPlaying(false);
     }
     audioRef.current.play();
@@ -51,7 +53,7 @@ export const TranscriptItem = ({
             {transcript.timestamp.toLocaleString()}
           </div>
           <div className="text-lg dark:text-gray-100 truncate px-1">
-            {transcript.transcript}
+            {transcript.question}
           </div>
         </div>
 
@@ -117,14 +119,14 @@ export const TranscriptItem = ({
           </h3>
 
           <div className="bg-gray-50 dark:bg-gray-700 dark:text-gray-200 p-4 rounded-lg">
-            {transcript.transcript}
+            {transcript.question}
           </div>
 
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500 dark:text-gray-400">
               {transcript.timestamp.toLocaleString()}
               {" - "}
-              {(transcript.blob.size / 1024).toFixed(2)} KB
+              {(transcript.questionAudio.size / 1024).toFixed(2)} KB
             </div>
             <div className="flex items-center gap-2">
               <button

@@ -5,6 +5,7 @@ import { useIndexedDB } from "../hooks/useIndexedDB";
 import { useState } from "react";
 import type { Language } from "../types/language";
 import type { Transcript } from "../types/transcript";
+import { base64ToBlob } from "../utils/blobConversion";
 
 const languageOptions: { value: Language; label: string }[] = [
   { label: "English", value: "en-IN" },
@@ -18,55 +19,76 @@ const languageOptions: { value: Language; label: string }[] = [
   { label: "Malyalam", value: "ml-IN" },
 ];
 
-function Recorder() {
+function Recorder({ userToken }: { userToken: string | null }) {
   const [language, setLanguage] = useState<Language>("en-IN");
+  const [callMultiAgent, setCallMultiAgent] = useState(false);
 
   const {
     records: transcripts,
     addRecord: addTranscript,
     deleteRecord: deleteTranscript,
     deleteAllRecords: deleteAllTranscripts,
-  } = useIndexedDB<Transcript>("transcript");
+  } = useIndexedDB<Transcript>("transcript", 1);
 
   const { isTranscribing, transcribe } = useTranscriber(
-    (audio, transcript, language) => {
-      console.log(audio, transcript, language);
+    (audio, response, language) => {
       return addTranscript({
         id: crypto.randomUUID(),
-        blob: audio,
+        questionAudio: audio,
         timestamp: new Date(),
-        transcript,
+        question: response.transcription,
         language,
+        answer: response.answer,
+        answerAudio: response.answer_audio
+          ? base64ToBlob(response.answer_audio)
+          : null,
       });
     },
   );
 
   const { isRecording, startRecording, stopRecording } = useAudioRecorder(
-    (audio: Blob) => transcribe(audio, language),
+    (audio: Blob) => transcribe(audio, language, callMultiAgent, userToken),
   );
 
   return (
     <div className="max-w-2xl mx-auto mt-5 space-y-8">
       <div className="flex flex-col items-center gap-4">
-        <label className="text-md dark:text-gray-200" htmlFor="language-select">
-          Language select
-        </label>
-        <select
-          className="rounded-lg px-6 py-3 mb-7 shadow font-medium dark:text-gray-100 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600"
-          name="language-select"
-          defaultValue={language}
-          onChange={(e) => setLanguage(e.target.value as Language)}
-        >
-          {languageOptions.map(
-            ({ value, label }: { value: Language; label: string }, index) => {
-              return (
-                <option value={value} key={index}>
-                  {label}
-                </option>
-              );
-            },
-          )}
-        </select>
+        <div>
+          <label
+            className="text-md dark:text-gray-200"
+            htmlFor="language-select"
+          >
+            Language select
+          </label>
+          <select
+            className="rounded-lg px-6 py-3 ml-2 shadow font-medium dark:text-gray-100 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600"
+            id="language-select"
+            defaultValue={language}
+            onChange={(e) => setLanguage(e.target.value as Language)}
+          >
+            {languageOptions.map(
+              ({ value, label }: { value: Language; label: string }, index) => {
+                return (
+                  <option value={value} key={index}>
+                    {label}
+                  </option>
+                );
+              },
+            )}
+          </select>
+        </div>
+
+        <div>
+          <input
+            type="checkbox"
+            id="call-multi-agent"
+            defaultChecked={callMultiAgent}
+            onChange={(e) => setCallMultiAgent(e.target.checked)}
+          />
+          <label htmlFor="call-multi-agent" className="ml-2 dark:text-gray-100">
+            Call MultiAgent
+          </label>
+        </div>
 
         <button
           onClick={isRecording ? stopRecording : startRecording}

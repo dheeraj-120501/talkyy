@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { openDB, type IDBPDatabase } from "idb";
 
-export const useIndexedDB = <T>(storeName: string) => {
+export const useIndexedDB = <T>(storeName: string, dbVersion: number) => {
   const [records, setRecords] = useState<T[]>([]);
   const dbName = "MyDatabase";
   const indexName = storeName + "TimestampIdx";
 
   useEffect(() => {
     const initDB = async () => {
-      const db = await openDB(dbName, 1, {
+      const db = await openDB(dbName, dbVersion, {
         upgrade(db) {
           const store = db.createObjectStore(storeName, { keyPath: "id" }); // Use string key
           store.createIndex(indexName, "timestamp");
@@ -29,19 +29,19 @@ export const useIndexedDB = <T>(storeName: string) => {
 
   const addRecord = async (record: T) => {
     console.log(record, storeName);
-    const db = await openDB(dbName);
+    const db = await openDB(dbName, dbVersion);
     await db.add(storeName, record);
     await loadRecords(db); // Reload users after adding
   };
 
   const deleteRecord = async (id: string) => {
-    const db = await openDB(dbName);
+    const db = await openDB(dbName, dbVersion);
     await db.delete(storeName, id);
     await loadRecords(db);
   };
 
   const deleteAllRecords = async () => {
-    const db = await openDB(dbName);
+    const db = await openDB(dbName, dbVersion);
     await db.clear(storeName);
     await loadRecords(db);
   };
