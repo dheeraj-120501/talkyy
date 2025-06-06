@@ -15,7 +15,7 @@ function App() {
           </label>
           <input
             id="user-token"
-            className="px-2 py-1 ml-2 dark:text-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-200 hover:bg-gray-50 rounded-md"
+            className="px-2 py-1 ml-2 dark:text-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md"
             onChange={(e) => setUserToken(e.target.value)}
             type={"text"}
           />

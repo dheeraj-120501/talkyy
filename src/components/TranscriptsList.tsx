@@ -51,7 +51,7 @@ export const TranscriptList = ({
           <span>Download all</span>
         </button>
       </div>
-      <div className="h-96 overflow-y-auto">
+      <div className="max-h-96 overflow-y-auto">
         <div className="flex flex-col gap-1.5">
           {transcripts.map((transcript) => (
             <TranscriptItem

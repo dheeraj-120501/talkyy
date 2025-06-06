@@ -61,7 +61,7 @@ function Recorder({ userToken }: { userToken: string | null }) {
             Language select
           </label>
           <select
-            className="rounded-lg px-6 py-3 ml-2 shadow font-medium dark:text-gray-100 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600"
+            className="rounded-lg px-6 py-3 ml-2 shadow font-medium dark:text-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600"
             id="language-select"
             defaultValue={language}
             onChange={(e) => setLanguage(e.target.value as Language)}

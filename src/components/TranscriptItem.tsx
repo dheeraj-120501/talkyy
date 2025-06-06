@@ -1,7 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import type { Transcript } from "../types/transcript";
 import { Modal } from "./Modal";
 import { downloadTranscripts } from "../utils/download";
+import { QuestionCard } from "./QuestionCard";
 
 interface TranscriptItemProps {
   transcript: Transcript;
@@ -13,27 +14,9 @@ export const TranscriptItem = ({
   deleteTranscript,
 }: TranscriptItemProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleCloseModal = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setIsPlaying(false);
-    }
     setIsModalOpen(false);
-  };
-
-  const playRecording = () => {
-    if (!audioRef.current) {
-      audioRef.current = new Audio(
-        URL.createObjectURL(transcript.questionAudio),
-      );
-      audioRef.current.onended = () => setIsPlaying(false);
-    }
-    audioRef.current.play();
-    setIsPlaying(true);
   };
 
   const downloadTranscript = async () => {
@@ -45,7 +28,7 @@ export const TranscriptItem = ({
   return (
     <>
       <div
-        className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-600"
+        className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex items-center justify-between cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
         onClick={() => setIsModalOpen(true)}
       >
         <div className="overflow-y-hidden">
@@ -113,64 +96,11 @@ export const TranscriptItem = ({
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Transcript Details
-          </h3>
-
-          <div className="bg-gray-50 dark:bg-gray-700 dark:text-gray-200 p-4 rounded-lg">
-            {transcript.question}
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-500 dark:text-gray-400">
-              {transcript.timestamp.toLocaleString()}
-              {" - "}
-              {(transcript.questionAudio.size / 1024).toFixed(2)} KB
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white py-2 px-2 rounded-lg inline-flex items-center"
-                onClick={deleteCurrentTranscript}
-              >
-                <svg
-                  className="fill-current w-4 h-4"
-                  fill="#ffffff"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  stroke="#ffffff"
-                >
-                  <path d="M5.755,20.283,4,8H20L18.245,20.283A2,2,0,0,1,16.265,22H7.735A2,2,0,0,1,5.755,20.283ZM21,4H16V3a1,1,0,0,0-1-1H9A1,1,0,0,0,8,3V4H3A1,1,0,0,0,3,6H21a1,1,0,0,0,0-2Z"></path>
-                </svg>
-              </button>
-
-              <button
-                className="px-2.5 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg"
-                onClick={downloadTranscript}
-              >
-                <svg
-                  className="fill-current w-4 h-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
-                </svg>
-              </button>
-
-              <button
-                onClick={playRecording}
-                disabled={isPlaying}
-                className={`px-4 py-1.5 rounded text-white ${
-                  isPlaying
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-500 hover:bg-green-600"
-                }`}
-              >
-                {isPlaying ? "Playing..." : "Play"}
-              </button>
-            </div>
-          </div>
-        </div>
+        <QuestionCard
+          transcript={transcript}
+          deleteCurrentTranscript={deleteCurrentTranscript}
+          downloadTranscript={downloadTranscript}
+        />
       </Modal>
     </>
   );
