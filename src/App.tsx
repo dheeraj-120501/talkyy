@@ -1,10 +1,26 @@
-import { useDarkMode } from "./hooks/useDarkMode";
 import Recorder from "./components/Recorder";
-import { useState } from "react";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useEffect } from "react";
 
 function App() {
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
-  const [userToken, setUserToken] = useState<string | null>(null);
+  const [isDarkMode, setDarkMode] = useLocalStorage<boolean>(
+    "darkMode",
+    window.matchMedia("(prefers-color-scheme: dark)").matches,
+  );
+  const toggleDarkMode = () => setDarkMode((prev: boolean) => !prev);
+  const [userToken, setUserToken] = useLocalStorage<string | null>(
+    "userToken",
+    null,
+  );
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (isDarkMode) {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }, [isDarkMode]);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8">
@@ -15,6 +31,7 @@ function App() {
           </label>
           <input
             id="user-token"
+            defaultValue={userToken ? userToken : ""}
             className="px-2 py-1 ml-2 dark:text-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-200 hover:bg-gray-300 rounded-md"
             onChange={(e) => setUserToken(e.target.value)}
             type={"text"}

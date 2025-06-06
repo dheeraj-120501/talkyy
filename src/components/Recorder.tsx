@@ -2,10 +2,10 @@ import { TranscriptList } from "./TranscriptsList";
 import { useAudioRecorder } from "../hooks/useAudioRecorder";
 import { useTranscriber } from "../hooks/useTranscriber";
 import { useIndexedDB } from "../hooks/useIndexedDB";
-import { useState } from "react";
 import type { Language } from "../types/language";
 import type { Transcript } from "../types/transcript";
 import { base64ToBlob } from "../utils/blobConversion";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const languageOptions: { value: Language; label: string }[] = [
   { label: "English", value: "en-IN" },
@@ -20,8 +20,14 @@ const languageOptions: { value: Language; label: string }[] = [
 ];
 
 function Recorder({ userToken }: { userToken: string | null }) {
-  const [language, setLanguage] = useState<Language>("en-IN");
-  const [callMultiAgent, setCallMultiAgent] = useState(false);
+  const [language, setLanguage] = useLocalStorage<Language>(
+    "language",
+    "en-IN",
+  );
+  const [callMultiAgent, setCallMultiAgent] = useLocalStorage(
+    "callMultiAgent",
+    false,
+  );
 
   const {
     records: transcripts,
