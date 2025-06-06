@@ -4,17 +4,21 @@ import type { Transcript } from "../types/transcript";
 export const downloadTranscripts = async (transcripts: Transcript[]) => {
   const zip = new JSZip();
 
-  // Add recordings
+  // Add question and answer recordings
   transcripts.forEach((recording: Transcript) => {
-    zip.file(`${recording.id}.wav`, recording.questionAudio);
+    zip.file(`questions/${recording.id}.wav`, recording.questionAudio);
+    if (recording.answerAudio)
+      zip.file(`answers/${recording.id}.mp3`, recording.answerAudio);
   });
 
-  // Add transcripts
+  // Add question and answer metadata
   const transcriptsMetadata = transcripts.map((recording: Transcript) => {
     return {
       id: recording.id,
-      file: `${recording.id}.wav`,
-      transcript: recording.question,
+      questionFile: `questions/${recording.id}.wav`,
+      question: recording.question,
+      answerFile: recording.answerAudio ? `answers/${recording.id}.mp3` : null,
+      answer: recording.answer,
       language: recording.language,
     };
   });
@@ -30,7 +34,7 @@ export const downloadTranscripts = async (transcripts: Transcript[]) => {
   // Create a link element to trigger the download
   const link = document.createElement("a");
   link.href = URL.createObjectURL(content);
-  link.download = "transcripts.zip";
+  link.download = "recordings.zip";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
