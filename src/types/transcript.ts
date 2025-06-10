@@ -1,11 +1,11 @@
 import type { Language } from "./language";
 
 export interface Transcript {
-  questionAudio: Blob;
-  timestamp: Date;
   id: string;
+  timestamp: Date;
   language: Language;
-  question: string;
+  questionAudio: Blob;
+  transcribedQuestion: string;
   answer: string | null;
   answerAudio: Blob | null;
 }

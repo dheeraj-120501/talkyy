@@ -28,7 +28,6 @@ export const useIndexedDB = <T>(storeName: string, dbVersion: number) => {
   };
 
   const addRecord = async (record: T) => {
-    console.log(record, storeName);
     const db = await openDB(dbName, dbVersion);
     await db.add(storeName, record);
     await loadRecords(db); // Reload users after adding

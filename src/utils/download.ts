@@ -16,7 +16,7 @@ export const downloadTranscripts = async (transcripts: Transcript[]) => {
     return {
       id: recording.id,
       questionFile: `questions/${recording.id}.wav`,
-      question: recording.question,
+      transcribedQuestion: recording.transcribedQuestion,
       answerFile: recording.answerAudio ? `answers/${recording.id}.mp3` : null,
       answer: recording.answer,
       language: recording.language,

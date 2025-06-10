@@ -36,7 +36,7 @@ export const TranscriptItem = ({
             {transcript.timestamp.toLocaleString()}
           </div>
           <div className="text-lg dark:text-gray-100 truncate px-1">
-            {transcript.question}
+            {transcript.transcribedQuestion}
           </div>
         </div>
 

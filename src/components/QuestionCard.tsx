@@ -33,7 +33,7 @@ export function QuestionCard({
       <div>
         <div className="flex justify-between mb-1 items-end">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Question
+            Transcribed Question
           </h3>
 
           <button
@@ -51,7 +51,7 @@ export function QuestionCard({
           </button>
         </div>
         <div className="max-h-40 overflow-auto bg-gray-200 dark:bg-gray-700 dark:text-gray-200 p-4 rounded-lg">
-          {transcript.question}
+          {transcript.transcribedQuestion}
         </div>
 
         <div className="text-sm ml-1 text-gray-500 dark:text-gray-400">

@@ -42,7 +42,7 @@ function Recorder({ userToken }: { userToken: string | null }) {
         id: crypto.randomUUID(),
         questionAudio: audio,
         timestamp: new Date(),
-        question: response.transcription,
+        transcribedQuestion: response.transcription,
         language,
         answer: response.answer,
         answerAudio: response.answer_audio

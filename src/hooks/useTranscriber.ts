@@ -54,7 +54,6 @@ export const useTranscriber = (
         call_multi_agent,
         userToken,
       );
-      console.log(response);
       await onTranscribeComplete(audio, response, language);
       setIsTranscribing(false);
     } catch {
