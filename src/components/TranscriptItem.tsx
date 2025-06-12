@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Transcript } from "../types/transcript";
 import { Modal } from "./Modal";
-import { downloadTranscripts } from "../utils/download";
+import { exportTranscripts } from "../utils/export";
 import { QuestionCard } from "./QuestionCard";
 
 interface TranscriptItemProps {
@@ -20,7 +20,7 @@ export const TranscriptItem = ({
   };
 
   const downloadTranscript = async () => {
-    await downloadTranscripts([transcript]);
+    await exportTranscripts([transcript]);
   };
 
   const deleteCurrentTranscript = () => deleteTranscript(transcript.id);

@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 import type { Transcript } from "../types/transcript";
 
-export const downloadTranscripts = async (transcripts: Transcript[]) => {
+export const exportTranscripts = async (transcripts: Transcript[]) => {
   const zip = new JSZip();
 
   // Add question and answer recordings
@@ -16,6 +16,7 @@ export const downloadTranscripts = async (transcripts: Transcript[]) => {
     return {
       id: recording.id,
       userId: recording.userId,
+      timestamp: recording.timestamp,
       questionFile: `questions/${recording.id}.wav`,
       originalQuestion: recording.originalQuestion,
       transcribedQuestion: recording.transcribedQuestion,

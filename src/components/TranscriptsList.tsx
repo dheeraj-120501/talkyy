@@ -1,5 +1,5 @@
 import type { Transcript } from "../types/transcript";
-import { downloadTranscripts } from "../utils/download";
+import { exportTranscripts } from "../utils/export";
 import { TranscriptItem } from "./TranscriptItem";
 
 interface TranscriptsListProps {
@@ -16,7 +16,7 @@ export const TranscriptList = ({
   if (transcripts.length === 0) return null;
 
   const downloadAll = () => {
-    downloadTranscripts(transcripts);
+    exportTranscripts(transcripts);
   };
 
   return (
