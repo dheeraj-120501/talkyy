@@ -10,7 +10,9 @@ export const useIndexedDB = <T>(storeName: string, dbVersion: number) => {
     const initDB = async () => {
       const db = await openDB(dbName, dbVersion, {
         upgrade(db) {
-          const store = db.createObjectStore(storeName, { keyPath: "id" }); // Use string key
+          const store = db.createObjectStore(storeName, {
+            keyPath: ["id", "userId", "language"],
+          });
           store.createIndex(indexName, "timestamp");
         },
       });

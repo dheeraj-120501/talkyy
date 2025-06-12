@@ -15,7 +15,9 @@ export const downloadTranscripts = async (transcripts: Transcript[]) => {
   const transcriptsMetadata = transcripts.map((recording: Transcript) => {
     return {
       id: recording.id,
+      userId: recording.userId,
       questionFile: `questions/${recording.id}.wav`,
+      originalQuestion: recording.originalQuestion,
       transcribedQuestion: recording.transcribedQuestion,
       answerFile: recording.answerAudio ? `answers/${recording.id}.mp3` : null,
       answer: recording.answer,

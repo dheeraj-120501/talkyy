@@ -1,34 +1,7 @@
 import { useState } from "react";
 import type { Language } from "../types/language";
 import type { TranscriberResponse } from "../types/transcriberResponse";
-
-const callApi = async (
-  audio: Blob,
-  language: Language,
-  call_multi_agent: boolean,
-  userToken: string | null,
-): Promise<TranscriberResponse> => {
-  const formdata = new FormData();
-  formdata.append("audio_file", audio, "sample.wav");
-  formdata.append("language", language);
-  formdata.append("vocabulary", "[]");
-  formdata.append("call_multi_agent", call_multi_agent.toString());
-
-  const headers = new Headers();
-  if (userToken) headers.append("user-token", userToken);
-
-  const requestOptions = {
-    method: "POST",
-    body: formdata,
-    headers: headers,
-  };
-
-  const response = await fetch(
-    "http://127.0.0.1:8000/dev/transcribe-audio/",
-    requestOptions,
-  );
-  return await response.json();
-};
+import { transcribeAudio } from "../utils/apiCall";
 
 export const useTranscriber = (
   onTranscribeComplete: (
@@ -48,7 +21,7 @@ export const useTranscriber = (
     setIsTranscribing(true);
 
     try {
-      const response = await callApi(
+      const response = await transcribeAudio(
         audio,
         language,
         call_multi_agent,

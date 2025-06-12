@@ -6,6 +6,9 @@ import type { Language } from "../types/language";
 import type { Transcript } from "../types/transcript";
 import { base64ToBlob } from "../utils/blobConversion";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useQuery } from "@tanstack/react-query";
+import { getQuestions } from "../utils/apiCall";
+import type { Question } from "../types/question";
 
 const languageOptions: { value: Language; label: string }[] = [
   { label: "English", value: "en-IN" },
@@ -28,6 +31,14 @@ function Recorder({ userToken }: { userToken: string | null }) {
     "callMultiAgent",
     false,
   );
+  const [userId] = useLocalStorage<string>("userId", crypto.randomUUID());
+
+  const { data: questions, isFetching: loadingQuestions } = useQuery({
+    queryKey: ["questions", language],
+    queryFn: async () => {
+      return await getQuestions(language);
+    },
+  });
 
   const {
     records: transcripts,
@@ -36,12 +47,32 @@ function Recorder({ userToken }: { userToken: string | null }) {
     deleteAllRecords: deleteAllTranscripts,
   } = useIndexedDB<Transcript>("transcript", 1);
 
+  const pendingQuestions = questions
+    ? ((): Question[] => {
+        const askedQuestions = transcripts.filter(
+          (transcript: Transcript) => transcript.language === language,
+        );
+        return questions.filter((question: Question) => {
+          return (
+            askedQuestions.find(
+              (transcript: Transcript) => transcript.id === question.id,
+            ) === undefined
+          );
+        });
+      })()
+    : [];
+  const currentQuestion = 0;
+  const isFinished = pendingQuestions.length === 0;
+
   const { isTranscribing, transcribe } = useTranscriber(
     (audio, response, language) => {
+      const originalQuestion = pendingQuestions[currentQuestion];
       return addTranscript({
-        id: crypto.randomUUID(),
-        questionAudio: audio,
+        id: originalQuestion.id,
+        userId,
         timestamp: new Date(),
+        questionAudio: audio,
+        originalQuestion: originalQuestion.question,
         transcribedQuestion: response.transcription,
         language,
         answer: response.answer,
@@ -84,6 +115,17 @@ function Recorder({ userToken }: { userToken: string | null }) {
           </select>
         </div>
 
+        <div className="w-11/12">
+          <div className="text-lg dark:text-gray-100">Question</div>
+          <div className="max-h-45 overflow-auto bg-gray-200 dark:bg-gray-700 dark:text-gray-200 p-4 rounded-lg">
+            {loadingQuestions
+              ? "Loading..."
+              : isFinished
+                ? "No more Questions"
+                : pendingQuestions[currentQuestion].question}
+          </div>
+        </div>
+
         <div>
           <input
             type="checkbox"
@@ -98,13 +140,11 @@ function Recorder({ userToken }: { userToken: string | null }) {
 
         <button
           onClick={isRecording ? stopRecording : startRecording}
-          disabled={isTranscribing}
-          className={`px-6 py-3 mb-10 rounded-full font-medium text-white transition-colors ${
-            isTranscribing
-              ? "bg-gray-400 cursor-not-allowed"
-              : isRecording
-                ? "bg-red-500 hover:bg-red-600"
-                : "bg-blue-500 hover:bg-blue-600"
+          disabled={isTranscribing || loadingQuestions || isFinished}
+          className={`px-6 py-3 mb-10 rounded-full font-medium text-white disabled:bg-gray-500 disabled:cursor-not-allowed disabled:dark:bg-gray-700 transition-colors ${
+            isRecording
+              ? "bg-red-500 hover:bg-red-600"
+              : "bg-blue-500 hover:bg-blue-600"
           }`}
         >
           {isTranscribing
