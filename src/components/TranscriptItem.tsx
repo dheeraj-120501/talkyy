@@ -3,10 +3,15 @@ import type { Transcript } from "../types/transcript";
 import { Modal } from "./Modal";
 import { exportTranscripts } from "../utils/export";
 import { QuestionCard } from "./QuestionCard";
+import type { Language } from "../types/language";
 
 interface TranscriptItemProps {
   transcript: Transcript;
-  deleteTranscript: (id: string) => void;
+  deleteTranscript: (
+    id: string,
+    userId: string,
+    language: Language,
+  ) => Promise<void>;
 }
 
 export const TranscriptItem = ({
@@ -23,7 +28,12 @@ export const TranscriptItem = ({
     await exportTranscripts([transcript]);
   };
 
-  const deleteCurrentTranscript = () => deleteTranscript(transcript.id);
+  const deleteCurrentTranscript = async () =>
+    await deleteTranscript(
+      transcript.id,
+      transcript.userId,
+      transcript.language,
+    );
 
   return (
     <>

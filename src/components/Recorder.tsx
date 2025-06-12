@@ -9,6 +9,8 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useQuery } from "@tanstack/react-query";
 import { getQuestions } from "../utils/apiCall";
 import type { Question } from "../types/question";
+import { importTranscripts } from "../utils/import";
+import type { ChangeEvent } from "react";
 
 const languageOptions: { value: Language; label: string }[] = [
   { label: "English", value: "en-IN" },
@@ -43,6 +45,7 @@ function Recorder({ userToken }: { userToken: string | null }) {
   const {
     records: transcripts,
     addRecord: addTranscript,
+    addRecords: addTranscripts,
     deleteRecord: deleteTranscript,
     deleteAllRecords: deleteAllTranscripts,
   } = useIndexedDB<Transcript>("transcript", 1);
@@ -87,9 +90,32 @@ function Recorder({ userToken }: { userToken: string | null }) {
     (audio: Blob) => transcribe(audio, language, callMultiAgent, userToken),
   );
 
+  const uploadTranscripts = async (e: ChangeEvent<HTMLInputElement>) => {
+    const importedTranscripts = await importTranscripts(e.target.files![0]);
+    console.log(importedTranscripts);
+    addTranscripts(importedTranscripts);
+  };
+
   return (
     <div className="max-w-2xl mx-auto mt-5 space-y-8">
       <div className="flex flex-col items-center gap-4">
+        <div className="mb-2">
+          <label
+            htmlFor="import-transcripts"
+            className="px-6 py-3 mb-10 rounded-full font-medium text-white bg-green-500 hover:bg-green-600"
+          >
+            Import
+          </label>
+          <input
+            type="file"
+            accept=".zip"
+            id="import-transcripts"
+            multiple={false}
+            onChange={uploadTranscripts}
+            hidden={true}
+          />
+        </div>
+
         <div>
           <label
             className="text-md dark:text-gray-200"

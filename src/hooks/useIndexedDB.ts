@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { openDB, type IDBPDatabase } from "idb";
+import type { Language } from "../types/language";
 
 export const useIndexedDB = <T>(storeName: string, dbVersion: number) => {
   const [records, setRecords] = useState<T[]>([]);
@@ -35,9 +36,23 @@ export const useIndexedDB = <T>(storeName: string, dbVersion: number) => {
     await loadRecords(db); // Reload users after adding
   };
 
-  const deleteRecord = async (id: string) => {
+  const addRecords = async (records: T[]) => {
     const db = await openDB(dbName, dbVersion);
-    await db.delete(storeName, id);
+    try {
+      await Promise.all(records.map((record: T) => db.add(storeName, record)));
+    } catch (e) {
+      console.log(e);
+    }
+    await loadRecords(db); // Reload users after adding
+  };
+
+  const deleteRecord = async (
+    id: string,
+    usersId: string,
+    language: Language,
+  ) => {
+    const db = await openDB(dbName, dbVersion);
+    await db.delete(storeName, [id, usersId, language]);
     await loadRecords(db);
   };
 
@@ -47,5 +62,5 @@ export const useIndexedDB = <T>(storeName: string, dbVersion: number) => {
     await loadRecords(db);
   };
 
-  return { records, addRecord, deleteRecord, deleteAllRecords };
+  return { records, addRecord, addRecords, deleteRecord, deleteAllRecords };
 };

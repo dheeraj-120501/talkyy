@@ -1,10 +1,15 @@
+import type { Language } from "../types/language";
 import type { Transcript } from "../types/transcript";
 import { exportTranscripts } from "../utils/export";
 import { TranscriptItem } from "./TranscriptItem";
 
 interface TranscriptsListProps {
   transcripts: Transcript[];
-  deleteTranscript: (id: string) => void;
+  deleteTranscript: (
+    id: string,
+    userId: string,
+    language: Language,
+  ) => Promise<void>;
   deleteAllTranscripts: () => void;
 }
 
