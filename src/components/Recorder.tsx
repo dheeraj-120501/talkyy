@@ -14,9 +14,9 @@ const languageOptions: { value: Language; label: string }[] = [
   { label: "Telugu", value: "te-IN" },
   { label: "Tamil", value: "ta-IN" },
   { label: "Marathi", value: "mr-IN" },
-  { label: "Gujrati", value: "gu-IN" },
-  { label: "Kannad", value: "kn-IN" },
-  { label: "Malyalam", value: "ml-IN" },
+  { label: "Gujarati", value: "gu-IN" },
+  { label: "Kannada", value: "kn-IN" },
+  { label: "Malayalam", value: "ml-IN" },
 ];
 
 function Recorder({ userToken }: { userToken: string | null }) {
