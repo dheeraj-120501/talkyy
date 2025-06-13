@@ -23,18 +23,12 @@ export const transcribeAudio = async (
     headers: headers,
   };
 
-  const response = await fetch(
-    "http://127.0.0.1:8000/dev/transcribe-audio/",
-    requestOptions,
-  );
+  const response = await fetch("/dev/transcribe-audio/", requestOptions);
   return await response.json();
 };
 
 export const getQuestions = async (language: Language): Promise<Question[]> => {
-  const response = await fetch(
-    `http://127.0.0.1:8000/dev/questions/${language}`,
-    { method: "GET" },
-  );
+  const response = await fetch(`/dev/questions/${language}`, { method: "GET" });
 
   return await response.json();
 };
