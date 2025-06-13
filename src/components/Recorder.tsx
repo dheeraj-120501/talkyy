@@ -58,7 +58,8 @@ function Recorder({ userToken }: { userToken: string | null }) {
         return questions.filter((question: Question) => {
           return (
             askedQuestions.find(
-              (transcript: Transcript) => transcript.id === question.id,
+              (transcript: Transcript) =>
+                transcript.id.split(":")[0] === question.id,
             ) === undefined
           );
         });
