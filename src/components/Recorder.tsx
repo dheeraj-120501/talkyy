@@ -71,7 +71,7 @@ function Recorder({ userToken }: { userToken: string | null }) {
     (audio, response, language) => {
       const originalQuestion = pendingQuestions[currentQuestion];
       return addTranscript({
-        id: originalQuestion.id,
+        id: `${originalQuestion.id}:${userId}:${language}`,
         userId,
         timestamp: new Date(),
         questionAudio: audio,
