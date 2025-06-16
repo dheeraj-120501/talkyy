@@ -144,8 +144,8 @@ function Recorder({ userToken }: { userToken: string | null }) {
 
         <div className="w-11/12">
           <div className="text-lg dark:text-gray-100">
-            Question(
-            {`${questions ? questions.length : 0 - pendingQuestions.length}/${questions?.length}`}
+            Question (
+            {`${(questions ? questions.length : 0) - pendingQuestions.length + 1}/${questions?.length}`}
             )
           </div>
           <div className="max-h-45 overflow-auto bg-gray-200 dark:bg-gray-700 dark:text-gray-200 p-4 rounded-lg">
