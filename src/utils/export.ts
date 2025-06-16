@@ -37,7 +37,7 @@ export const exportTranscripts = async (transcripts: Transcript[]) => {
   // Create a link element to trigger the download
   const link = document.createElement("a");
   link.href = URL.createObjectURL(content);
-  link.download = "recordings.zip";
+  link.download = `recordings-${transcripts[0].userId}.zip`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
