@@ -143,7 +143,11 @@ function Recorder({ userToken }: { userToken: string | null }) {
         </div>
 
         <div className="w-11/12">
-          <div className="text-lg dark:text-gray-100">Question</div>
+          <div className="text-lg dark:text-gray-100">
+            Question(
+            {`${questions ? questions.length : 0 - pendingQuestions.length}/${questions?.length}`}
+            )
+          </div>
           <div className="max-h-45 overflow-auto bg-gray-200 dark:bg-gray-700 dark:text-gray-200 p-4 rounded-lg">
             {loadingQuestions
               ? "Loading..."
