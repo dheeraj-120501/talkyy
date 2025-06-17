@@ -1,17 +1,17 @@
 import { useRef, useState } from "react";
 import type { Transcript } from "../types/transcript";
 
-interface QuestionCardProps {
+interface TranscriptCardProps {
   transcript: Transcript;
   deleteCurrentTranscript: () => void;
   downloadTranscript: () => Promise<void>;
 }
 
-export function QuestionCard({
+export function TranscriptCard({
   transcript,
   deleteCurrentTranscript,
   downloadTranscript,
-}: QuestionCardProps) {
+}: TranscriptCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const questionAudioRef = useRef<HTMLAudioElement | null>(null);
   const answerAudioRef = useRef<HTMLAudioElement | null>(null);

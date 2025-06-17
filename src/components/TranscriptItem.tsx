@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { Transcript } from "../types/transcript";
 import { Modal } from "./Modal";
 import { exportTranscripts } from "../utils/export";
-import { QuestionCard } from "./QuestionCard";
+import { TranscriptCard } from "./TranscirptCard";
 import type { Language } from "../types/language";
 
 interface TranscriptItemProps {
@@ -106,7 +106,7 @@ export const TranscriptItem = ({
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-        <QuestionCard
+        <TranscriptCard
           transcript={transcript}
           deleteCurrentTranscript={deleteCurrentTranscript}
           downloadTranscript={downloadTranscript}

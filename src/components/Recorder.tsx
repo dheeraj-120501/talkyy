@@ -12,6 +12,8 @@ import type { Question } from "../types/question";
 import { importTranscripts } from "../utils/import";
 import type { ChangeEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
+import type { Phrase } from "../types/phrase";
+import { PhraseList } from "./PhraseList";
 
 const languageOptions: { value: Language; label: string }[] = [
   { label: "English", value: "en-IN" },
@@ -35,6 +37,11 @@ function Recorder({ userToken }: { userToken: string | null }) {
     false,
   );
   const [userId] = useLocalStorage<string>("userId", uuidv4());
+
+  const [phrases, setPhrases] = useLocalStorage<Phrase[]>("phrases", []);
+  const currentPhrases = phrases.filter(
+    (phrase) => phrase.language === language,
+  );
 
   const { data: questions, isFetching: loadingQuestions } = useQuery({
     queryKey: ["questions", language],
@@ -89,7 +96,8 @@ function Recorder({ userToken }: { userToken: string | null }) {
   );
 
   const { isRecording, startRecording, stopRecording } = useAudioRecorder(
-    (audio: Blob) => transcribe(audio, language, callMultiAgent, userToken),
+    (audio: Blob) =>
+      transcribe(audio, language, currentPhrases, callMultiAgent, userToken),
   );
 
   const uploadTranscripts = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -142,6 +150,12 @@ function Recorder({ userToken }: { userToken: string | null }) {
             )}
           </select>
         </div>
+
+        <PhraseList
+          phrases={currentPhrases}
+          setPhrases={setPhrases}
+          language={language}
+        />
 
         <div className="w-11/12">
           <div className="text-lg dark:text-gray-100">

@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { Language } from "../types/language";
 import type { TranscriberResponse } from "../types/transcriberResponse";
 import { transcribeAudio } from "../utils/apiCall";
+import type { Phrase } from "../types/phrase";
 
 export const useTranscriber = (
   onTranscribeComplete: (
@@ -15,6 +16,7 @@ export const useTranscriber = (
   const transcribe = async (
     audio: Blob,
     language: Language,
+    phrases: Phrase[],
     call_multi_agent: boolean,
     userToken: string | null,
   ) => {
@@ -24,6 +26,7 @@ export const useTranscriber = (
       const response = await transcribeAudio(
         audio,
         language,
+        phrases,
         call_multi_agent,
         userToken,
       );
