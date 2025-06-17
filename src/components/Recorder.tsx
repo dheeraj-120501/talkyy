@@ -11,6 +11,7 @@ import { getQuestions } from "../utils/apiCall";
 import type { Question } from "../types/question";
 import { importTranscripts } from "../utils/import";
 import type { ChangeEvent } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const languageOptions: { value: Language; label: string }[] = [
   { label: "English", value: "en-IN" },
@@ -33,7 +34,7 @@ function Recorder({ userToken }: { userToken: string | null }) {
     "callMultiAgent",
     false,
   );
-  const [userId] = useLocalStorage<string>("userId", crypto.randomUUID());
+  const [userId] = useLocalStorage<string>("userId", uuidv4());
 
   const { data: questions, isFetching: loadingQuestions } = useQuery({
     queryKey: ["questions", language],
