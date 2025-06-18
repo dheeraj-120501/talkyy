@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface AddPhraseFormProps {
-  addPhrase: (value: string, weight: number) => void;
+  addPhrase: (value: string, boost: number) => void;
   closeDialog: () => void;
 }
 
@@ -10,7 +10,7 @@ export const AddPhraseForm = ({
   closeDialog,
 }: AddPhraseFormProps) => {
   const [phrase, setPhrase] = useState("");
-  const [weight, setWeight] = useState(1);
+  const [boost, setBoost] = useState(1);
 
   return (
     <div className="flex flex-col gap-5 px-10 items-center">
@@ -27,19 +27,19 @@ export const AddPhraseForm = ({
         />
       </div>
       <div className="flex w-10/12 gap-2">
-        <label htmlFor="weight" className="dark:text-gray-100">
-          Weight
+        <label htmlFor="boost" className="dark:text-gray-100">
+          Boost
         </label>
         <input
           type="range"
-          onChange={(e) => setWeight(Number.parseFloat(e.target.value))}
-          value={weight}
+          onChange={(e) => setBoost(Number.parseFloat(e.target.value))}
+          value={boost}
           min={0}
           max={20}
           step={0.01}
-          id="weight"
+          id="boost"
         />
-        <span className="dark:text-gray-100">{weight}</span>
+        <span className="dark:text-gray-100">{boost}</span>
       </div>
 
       <div className="flex justify-between w-10/12">
@@ -52,7 +52,7 @@ export const AddPhraseForm = ({
         <button
           className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg inline-flex items-center"
           onClick={() => {
-            addPhrase(phrase, weight);
+            addPhrase(phrase, boost);
             closeDialog();
           }}
         >

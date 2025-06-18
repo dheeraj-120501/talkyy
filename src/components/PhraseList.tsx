@@ -25,7 +25,7 @@ export const PhraseList = ({
     });
   };
 
-  const addPhrase = (value: string, weight: number) => {
+  const addPhrase = (value: string, boost: number) => {
     setPhrases((phrases) => {
       return [
         ...phrases.filter(
@@ -33,7 +33,7 @@ export const PhraseList = ({
         ),
         {
           value,
-          weight,
+          boost,
           language,
         },
       ];

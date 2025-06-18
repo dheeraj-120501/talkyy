@@ -13,9 +13,11 @@ export const transcribeAudio = async (
   const formdata = new FormData();
   formdata.append("audio_file", audio, "sample.wav");
   formdata.append("language", language);
-  formdata.append(
-    "vocabulary",
-    JSON.stringify(phrases.map((phrase) => phrase.value)),
+  phrases.forEach((phrase) =>
+    formdata.append(
+      "vocabulary",
+      JSON.stringify({ value: phrase.value, boost: phrase.boost }),
+    ),
   );
   formdata.append("call_multi_agent", call_multi_agent.toString());
 
