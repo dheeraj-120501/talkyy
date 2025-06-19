@@ -25,7 +25,7 @@ export const importTranscripts = async (
       return {
         id: metadata.id,
         userId: metadata.userId,
-        timestamp: metadata.timestamp,
+        timestamp: new Date(metadata.timestamp),
         language: metadata.language,
         originalQuestion: metadata.originalQuestion,
         transcribedQuestion: metadata.transcribedQuestion,
