@@ -1,7 +1,7 @@
 export interface TranscriberResponse {
   transcription: string;
-  answer: string | null;
-  answer_audio: AudioResponse | null;
+  text_response: string | null;
+  audio_response: AudioResponse | null;
 }
 
 export interface AudioResponse {

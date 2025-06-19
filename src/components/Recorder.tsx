@@ -87,9 +87,9 @@ function Recorder({ userToken }: { userToken: string | null }) {
         originalQuestion: originalQuestion.question,
         transcribedQuestion: response.transcription,
         language,
-        answer: response.answer,
-        answerAudio: response.answer_audio
-          ? base64ToBlob(response.answer_audio)
+        answer: response.text_response,
+        answerAudio: response.audio_response
+          ? base64ToBlob(response.audio_response)
           : null,
       });
     },
