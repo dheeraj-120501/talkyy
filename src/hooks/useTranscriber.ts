@@ -17,8 +17,9 @@ export const useTranscriber = (
     audio: Blob,
     language: Language,
     phrases: Phrase[],
-    call_multi_agent: boolean,
+    call_ai_search: boolean,
     userToken: string | null,
+    userId: string,
   ) => {
     setIsTranscribing(true);
 
@@ -27,8 +28,9 @@ export const useTranscriber = (
         audio,
         language,
         phrases,
-        call_multi_agent,
+        call_ai_search,
         userToken,
+        userId,
       );
       await onTranscribeComplete(audio, response, language);
       setIsTranscribing(false);

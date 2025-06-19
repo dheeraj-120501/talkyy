@@ -7,8 +7,9 @@ export const transcribeAudio = async (
   audio: Blob,
   language: Language,
   phrases: Phrase[],
-  call_multi_agent: boolean,
+  call_ai_search: boolean,
   userToken: string | null,
+  userId: string,
 ): Promise<TranscriberResponse> => {
   const formdata = new FormData();
   formdata.append("audio_file", audio, "sample.wav");
@@ -19,10 +20,11 @@ export const transcribeAudio = async (
       JSON.stringify({ value: phrase.value, boost: phrase.boost }),
     ),
   );
-  formdata.append("call_multi_agent", call_multi_agent.toString());
+  formdata.append("call_ai_search", call_ai_search.toString());
 
   const headers = new Headers();
   if (userToken) headers.append("user-token", userToken);
+  headers.append("user_id", userId);
 
   const requestOptions = {
     method: "POST",

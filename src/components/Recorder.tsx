@@ -32,8 +32,8 @@ function Recorder({ userToken }: { userToken: string | null }) {
     "language",
     "en-IN",
   );
-  const [callMultiAgent, setCallMultiAgent] = useLocalStorage(
-    "callMultiAgent",
+  const [callAISearch, setCallAISearch] = useLocalStorage(
+    "callAISearch",
     false,
   );
   const [userId] = useLocalStorage<string>("userId", uuidv4());
@@ -97,7 +97,14 @@ function Recorder({ userToken }: { userToken: string | null }) {
 
   const { isRecording, startRecording, stopRecording } = useAudioRecorder(
     (audio: Blob) =>
-      transcribe(audio, language, currentPhrases, callMultiAgent, userToken),
+      transcribe(
+        audio,
+        language,
+        currentPhrases,
+        callAISearch,
+        userToken,
+        userId,
+      ),
   );
 
   const uploadTranscripts = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -175,12 +182,12 @@ function Recorder({ userToken }: { userToken: string | null }) {
         <div>
           <input
             type="checkbox"
-            id="call-multi-agent"
-            defaultChecked={callMultiAgent}
-            onChange={(e) => setCallMultiAgent(e.target.checked)}
+            id="call-ai-search"
+            defaultChecked={callAISearch}
+            onChange={(e) => setCallAISearch(e.target.checked)}
           />
-          <label htmlFor="call-multi-agent" className="ml-2 dark:text-gray-100">
-            Call MultiAgent
+          <label htmlFor="call-ai-search" className="ml-2 dark:text-gray-100">
+            Call AI Search
           </label>
         </div>
 
