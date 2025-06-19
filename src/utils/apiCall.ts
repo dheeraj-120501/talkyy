@@ -24,7 +24,7 @@ export const transcribeAudio = async (
 
   const headers = new Headers();
   if (userToken) headers.append("user-token", userToken);
-  headers.append("user_id", userId);
+  headers.append("user-id", userId);
 
   const requestOptions = {
     method: "POST",
