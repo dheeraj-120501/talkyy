@@ -1,10 +1,12 @@
 import type { Language } from "../types/language";
+import type { Phrase } from "../types/phrase";
 import type { Transcript } from "../types/transcript";
 import { exportTranscripts } from "../utils/export";
 import { TranscriptItem } from "./TranscriptItem";
 
 interface TranscriptsListProps {
   transcripts: Transcript[];
+  phrases: Phrase[];
   deleteTranscript: (
     id: string,
     userId: string,
@@ -15,13 +17,14 @@ interface TranscriptsListProps {
 
 export const TranscriptList = ({
   transcripts,
+  phrases,
   deleteTranscript,
   deleteAllTranscripts: deleteAllTranscripts,
 }: TranscriptsListProps) => {
   if (transcripts.length === 0) return null;
 
   const downloadAll = () => {
-    exportTranscripts(transcripts);
+    exportTranscripts(transcripts, phrases);
   };
 
   return (
@@ -62,6 +65,7 @@ export const TranscriptList = ({
             <TranscriptItem
               key={transcript.id}
               transcript={transcript}
+              phrases={phrases}
               deleteTranscript={deleteTranscript}
             />
           ))}

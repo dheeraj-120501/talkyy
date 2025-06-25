@@ -1,7 +1,11 @@
 import JSZip from "jszip";
 import type { Transcript } from "../types/transcript";
+import type { Phrase } from "../types/phrase";
 
-export const exportTranscripts = async (transcripts: Transcript[]) => {
+export const exportTranscripts = async (
+  transcripts: Transcript[],
+  phrases: Phrase[],
+) => {
   const zip = new JSZip();
 
   // Add question and answer recordings
@@ -28,8 +32,12 @@ export const exportTranscripts = async (transcripts: Transcript[]) => {
   const metadataBlob = new Blob([JSON.stringify(transcriptsMetadata)], {
     type: "text/plain",
   });
+  const phrasesBlob = new Blob([JSON.stringify(phrases)], {
+    type: "text/plain",
+  });
 
   zip.file("metadata.json", metadataBlob);
+  zip.file("phrases.json", phrasesBlob);
 
   // Generate the zip file
   const content = await zip.generateAsync({ type: "blob" });

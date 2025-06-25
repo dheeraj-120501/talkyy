@@ -4,9 +4,11 @@ import { Modal } from "./Modal";
 import { exportTranscripts } from "../utils/export";
 import { TranscriptCard } from "./TranscirptCard";
 import type { Language } from "../types/language";
+import type { Phrase } from "../types/phrase";
 
 interface TranscriptItemProps {
   transcript: Transcript;
+  phrases: Phrase[];
   deleteTranscript: (
     id: string,
     userId: string,
@@ -16,6 +18,7 @@ interface TranscriptItemProps {
 
 export const TranscriptItem = ({
   transcript,
+  phrases,
   deleteTranscript,
 }: TranscriptItemProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,7 +28,7 @@ export const TranscriptItem = ({
   };
 
   const downloadTranscript = async () => {
-    await exportTranscripts([transcript]);
+    await exportTranscripts([transcript], phrases);
   };
 
   const deleteCurrentTranscript = async () =>

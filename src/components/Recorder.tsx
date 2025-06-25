@@ -233,6 +233,7 @@ function Recorder({ userToken }: { userToken: string | null }) {
 
         <TranscriptList
           transcripts={transcripts}
+          phrases={phrases}
           deleteTranscript={deleteTranscript}
           deleteAllTranscripts={deleteAllTranscripts}
         />
