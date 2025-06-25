@@ -14,6 +14,7 @@ import type { ChangeEvent } from "react";
 import { v4 as uuidv4 } from "uuid";
 import type { Phrase } from "../types/phrase";
 import { PhraseList } from "./PhraseList";
+import { extractBoostWords } from "../utils/extractBoostWords";
 
 const languageOptions: { value: Language; label: string }[] = [
   { label: "English", value: "en-IN" },
@@ -42,6 +43,23 @@ function Recorder({ userToken }: { userToken: string | null }) {
   const currentPhrases = phrases.filter(
     (phrase) => phrase.language === language,
   );
+
+  const addPhrases = (values: string[], language: Language) => {
+    setPhrases((phrases) => {
+      return [
+        ...phrases.filter(
+          (phrase) =>
+            !(
+              values.findIndex((value) => value == phrase.value) != -1 &&
+              phrase.language === language
+            ),
+        ),
+        ...values.map((value) => {
+          return { value, boost: 1.0, language };
+        }),
+      ];
+    });
+  };
 
   const { data: questions, isFetching: loadingQuestions } = useQuery({
     queryKey: ["questions", language],
@@ -79,6 +97,12 @@ function Recorder({ userToken }: { userToken: string | null }) {
   const { isTranscribing, transcribe } = useTranscriber(
     (audio, response, language) => {
       const originalQuestion = pendingQuestions[currentQuestion];
+      const newBoostWords = extractBoostWords(
+        originalQuestion.question,
+        response.transcription,
+      );
+      addPhrases(newBoostWords, language);
+
       return addTranscript({
         id: `${originalQuestion.id}:${userId}:${language}`,
         userId,
